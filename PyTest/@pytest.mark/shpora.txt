@@ -1,0 +1,34 @@
+
+Маркування тестів і пропусків тестов
+
+# Запустится тільки smoke:
+@pytest.mark.smoke : pytest -s -v -m smoke test_fixture.py
+
+# Запуск усіх тестів, не позначених як smoke:
+@pytest.mark.smoke : pytest -s -v -m "not smoke" test_fixture.py
+
+# Запуск тестів з різними марками:
+@pytest.mark.smoke
+@pytest.mark.regression : pytest -s -v -m "дим або регресія" test_fixture.py
+
+# Запуск тестів у наявності кілька маркировок:
+@pytest.mark.smoke
+@pytest.mark.win10 : pytest -s -v -m "smoke and win10" test_fixture.py
+
+# Пропуск тестів:
+@pytest.mark.skip : pytest -s -v test_fixture.py
+
+# Повідомити тест як очікуємо падаючий(помітка:XFAIL):
+# упавший тест тепер позначено як xfail, але результат прогону тестів помічено як успішний
+# Коли пакет починають, ми це дізнаємося, так як тест буде позначений як XPASS
+@pytest.mark.xfail : pytest -rx -v test_fixture.py
+
+# причина - Щоб побачити це повідомлення в консолі, при запуску потрібно додати параметр pytest -rX
+@pytest.mark.xfail(reason="виправлення цієї помилки прямо зараз") : pytest -rX -v test_fixture.py
+
+# Параметр strict
+# Ні XFAIL, ні XPASS за замовчуванням не приводять до падіння всього набору тестів.
+# Але це можна змінити, встановивши параметру strict value True:
+# У цьому випадку, якщо тест буде неожиданно пройдений (XPASS),
+# це приведе до падіння всього тестового набору
+@pytest.mark.xfail(strict=True) : pytest -rX -v test_fixture.py
